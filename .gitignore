@@ -8,3 +8,7 @@ env/
 venv/
 .pytest_cache/
 _dev_analysis/
+
+# PyPI verification artifacts
+final_pypi_verification*.md
+pypi_verify_*.py
