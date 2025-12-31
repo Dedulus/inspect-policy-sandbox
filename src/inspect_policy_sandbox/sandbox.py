@@ -6,7 +6,6 @@ from typing import Any, Dict, List, Literal, Optional, Union, overload
 from inspect_ai.util import SandboxEnvironment, SandboxConnection, ExecResult, sandboxenv
 from inspect_ai.event import SandboxEvent
 from inspect_ai.log import transcript
-from inspect_ai.util._sandbox.registry import registry_find_sandboxenv
 
 from .policy import SandboxPolicy, SandboxPolicyViolationError
 
@@ -18,32 +17,6 @@ class PolicySandboxEnvironment(SandboxEnvironment):
         super().__init__()
         self._inner = inner
         self._policy = policy
-
-    @classmethod
-    def sample_init(cls, task_name: str, config: Optional[str], metadata: Dict[str, Any]) -> "PolicySandboxEnvironment":
-        # Extract policy config from metadata or config
-        policy_config = metadata.get("policy", {})
-        policy = SandboxPolicy(
-            allow_exec=policy_config.get("allow_exec", []),
-            deny_exec=policy_config.get("deny_exec", []),
-            allow_read=policy_config.get("allow_read", []),
-            deny_read=policy_config.get("deny_read", []),
-            allow_write=policy_config.get("allow_write", []),
-            deny_write=policy_config.get("deny_write", [])
-        )
-        
-        inner_sandbox_name = metadata.get("inner_sandbox", "local")
-        
-        # Find and instantiate inner sandbox
-        sandbox_cls = registry_find_sandboxenv(inner_sandbox_name)
-        
-        if hasattr(sandbox_cls, "sample_init"):
-            inner = sandbox_cls.sample_init(task_name, config, metadata)
-        else:
-            # Fallback for simple classes
-            inner = sandbox_cls()
-            
-        return cls(inner, policy)
 
     async def exec(
         self,
@@ -168,4 +141,3 @@ class PolicySandboxEnvironment(SandboxEnvironment):
     async def sample_cleanup(cls, task_name: str, config: Any, environments: Dict[str, "SandboxEnvironment"], interrupted: bool) -> None:
         # NO-OP as per requirements. 
         pass
-

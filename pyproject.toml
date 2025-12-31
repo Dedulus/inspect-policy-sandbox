@@ -20,6 +20,9 @@ dependencies = [
     "inspect-ai",
 ]
 
+[project.entry-points.inspect_ai]
+policy-sandbox = "inspect_policy_sandbox"
+
 [project.optional-dependencies]
 dev = [
     "pytest",
