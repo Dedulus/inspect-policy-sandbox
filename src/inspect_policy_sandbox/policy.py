@@ -29,4 +29,4 @@ class SandboxPolicy:
 
     # Note: Logic to check these will be implemented in the wrapper
     # or helper methods can be added here if complex matching is needed.
-    # For now, we'll keep it simple data storage as per requirements.
+    # For now, lets keep it simple data storage as per requirements.
