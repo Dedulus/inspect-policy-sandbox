@@ -5,7 +5,9 @@ from typing import Any, Dict, List, Literal, Optional, Union, overload
 
 from inspect_ai.util import SandboxEnvironment, SandboxConnection, ExecResult, sandboxenv
 from inspect_ai.event import SandboxEvent
+from inspect_ai.event import SandboxEvent
 from inspect_ai.log import transcript
+from inspect_ai.util._sandbox.registry import registry_find_sandboxenv
 
 from .policy import SandboxPolicy, SandboxPolicyViolationError
 
@@ -141,3 +143,38 @@ class PolicySandboxEnvironment(SandboxEnvironment):
     async def sample_cleanup(cls, task_name: str, config: Any, environments: Dict[str, "SandboxEnvironment"], interrupted: bool) -> None:
         # NO-OP as per requirements. 
         pass
+
+    @classmethod
+    async def sample_init(cls, task_name: str, config: Any, metadata: Dict[str, Any]) -> Dict[str, SandboxEnvironment]:
+        # Extract policy config from metadata
+        policy_config = metadata.get("policy", {})
+        policy = SandboxPolicy(
+            allow_exec=policy_config.get("allow_exec", []),
+            deny_exec=policy_config.get("deny_exec", []),
+            allow_read=policy_config.get("allow_read", []),
+            deny_read=policy_config.get("deny_read", []),
+            allow_write=policy_config.get("allow_write", []),
+            deny_write=policy_config.get("deny_write", [])
+        )
+
+        # Resolve inner sandbox
+        inner_sandbox_name = metadata.get("inner_sandbox", "local")
+        sandbox_cls = registry_find_sandboxenv(inner_sandbox_name)
+
+        # Instantiate inner sandbox
+        # Note: We support inner sandboxes that use sample_init (like Docker)
+        # or simple init (like Local).
+        if hasattr(sandbox_cls, "sample_init"):
+            inner_result = await sandbox_cls.sample_init(task_name, config, metadata)
+            if isinstance(inner_result, dict):
+                inner = inner_result.get("default")
+                if not inner:
+                    # Fallback if no default, take the first one or error
+                    # For safety, strict assumption: inner sandbox sample_init returns properly
+                    inner = next(iter(inner_result.values()))
+            else:
+                inner = inner_result
+        else:
+            inner = sandbox_cls()
+
+        return {"default": cls(inner, policy)}
