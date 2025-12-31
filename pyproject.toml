@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Inspect AI extension for policy-enforced sandbox environments"
 readme = "README.md"
 authors = [
-    { name = "Your Name", email = "your.email@example.com" }
+    { name = "Arnab Mitra", email = "papan.mitra.2121@gmail.com" }
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
