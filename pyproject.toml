@@ -16,9 +16,13 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 requires-python = ">=3.11"
-dependencies = [
     "inspect-ai",
 ]
+
+[project.urls]
+Repository = "https://github.com/Dedulus/inspect-policy-sandbox"
+Issues = "https://github.com/Dedulus/inspect-policy-sandbox/issues"
+
 
 [project.entry-points.inspect_ai]
 policy-sandbox = "inspect_policy_sandbox"
