@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.2] - 2026-01-01
+
+### Fixed
+- Fixed critical `TypeError` in `exec`, `read_file`, and `write_file` due to missing `**kwargs` support, ensuring compatibility with Inspect AI runtime (which passes arguments like `timeout_retry`).
+
+## [0.1.1] - 2026-01-01
+
+### Fixed
+- Fixed `sample_init` factory method to correctly instantiate `PolicySandboxEnvironment` and resolve inner sandboxes from registry.
+
 ## [v0.1.0] - 2025-12-31
 
 ### 🚀 Features

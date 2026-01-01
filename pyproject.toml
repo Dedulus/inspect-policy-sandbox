@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "inspect-policy-sandbox"
-version = "0.1.1"
+version = "0.1.2"
 description = "Inspect AI extension for policy-enforced sandbox environments"
 readme = "README.md"
 authors = [

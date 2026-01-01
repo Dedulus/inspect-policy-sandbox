@@ -28,6 +28,7 @@ class PolicySandboxEnvironment(SandboxEnvironment):
         env: dict[str, str] = {},
         user: str | None = None,
         timeout: int | None = None,
+        **kwargs: Any,
     ) -> ExecResult:
         # Check Policy
         command_str = cmd[0] if cmd else ""
@@ -62,9 +63,9 @@ class PolicySandboxEnvironment(SandboxEnvironment):
             ))
             raise SandboxPolicyViolationError(f"Execution of '{command_str}' is denied by policy.")
 
-        return await self._inner.exec(cmd, input, cwd, env, user, timeout)
+        return await self._inner.exec(cmd, input, cwd, env, user, timeout, **kwargs)
 
-    async def read_file(self, file: str, text: bool = True) -> Union[str, bytes]:
+    async def read_file(self, file: str, text: bool = True, **kwargs: Any) -> Union[str, bytes]:
         # Check Policy
         allowed = True
         if self._policy.deny_read:
@@ -95,9 +96,9 @@ class PolicySandboxEnvironment(SandboxEnvironment):
             ))
             raise SandboxPolicyViolationError(f"Reading file '{file}' is denied by policy.")
             
-        return await self._inner.read_file(file, text)
+        return await self._inner.read_file(file, text, **kwargs)
 
-    async def write_file(self, file: str, content: Union[str, bytes]) -> None:
+    async def write_file(self, file: str, content: Union[str, bytes], **kwargs: Any) -> None:
         # Check Policy
         allowed = True
         if self._policy.deny_write:
@@ -128,7 +129,7 @@ class PolicySandboxEnvironment(SandboxEnvironment):
             ))
             raise SandboxPolicyViolationError(f"Writing to file '{file}' is denied by policy.")
 
-        await self._inner.write_file(file, content)
+        await self._inner.write_file(file, content, **kwargs)
 
     async def connection(self) -> SandboxConnection:
         return await self._inner.connection()

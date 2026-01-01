@@ -12,3 +12,4 @@ _dev_analysis/
 # PyPI verification artifacts
 final_pypi_verification*.md
 pypi_verify_*.py
+smoke_test_e2e/
