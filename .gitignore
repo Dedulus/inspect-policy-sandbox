@@ -128,6 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# PyPI verification artifacts
-final_pypi_verification*.md
 pypi_verify_*.py
