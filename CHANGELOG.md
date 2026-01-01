@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.3] - 2026-01-01
+
+### Fixed
+- Added `[project.urls]` to `pyproject.toml` to display Repository and Issues links on PyPI.
+
 ## [0.1.2] - 2026-01-01
 
 ### Fixed
