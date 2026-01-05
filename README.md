@@ -16,11 +16,10 @@ When a policy violation occurs, the extension:
 
 ## Installation
 
-This extension is designed to be installed in a Python virtual environment where `inspect-ai` is also installed.
+### Install from PyPI (recommended)
 
 ```bash
-# Install from source
-pip install -e .
+pip install inspect-policy-sandbox
 ```
 
 ## Usage
@@ -73,18 +72,3 @@ Example Metadata:
 }
 ```
 
-## Development
-
-1. Create a virtual environment:
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   ```
-2. Install dependencies:
-   ```bash
-   pip install -e .[dev]
-   ```
-3. Run tests:
-   ```bash
-   pytest tests/
-   ```
